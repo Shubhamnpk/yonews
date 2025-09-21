@@ -3,8 +3,8 @@
 **Yo News** is an open-source software (OSS) project designed as a modern and elegant news website.
 
 ## Overview
-- **Live Site**: [https://shubhamnpk.github.io/yo-news/](https://shubhamnpk.github.io/yo-news/)
-- **Source Code**: [https://github.com/Shubhamnpk/yo-news](https://github.com/Shubhamnpk/yo-news)
+- **Live Site**: [https://shubhamnpk.github.io/yonews/](https://shubhamnpk.github.io/yonews/)
+- **Source Code**: [https://github.com/Shubhamnpk/yonews](https://github.com/Shubhamnpk/yonews)
 - **Creator**: Shubhamnpk
 - **Purpose**: A sleek, user-friendly platform for presenting news with a focus on contemporary design.
 

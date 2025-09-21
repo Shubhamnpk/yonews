@@ -7,5 +7,5 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ['lucide-react'],
   },
-  base: '/yo-news/', // Set the base path for your GitHub page
+  base: '/yonews/', // Set the base path for your GitHub page
 });
