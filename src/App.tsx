@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTranslation } from 'react-i18next';
 import { useNewsFeed } from './hooks/useNewsFeed';
 import { Settings } from './types/news';
 import { NewsCard } from './components/NewsCard';
+import { SettingsModal } from './components/SettingsModal';
 import { SetupWizard } from './components/SetupWizard';
 import { 
   NewspaperIcon, 
@@ -18,6 +20,7 @@ import {
 } from 'lucide-react';
 
 function App() {
+  const { t, i18n } = useTranslation();
   const {
     articles,
     isLoading,
@@ -43,19 +46,23 @@ function App() {
   useEffect(() => {
     const root = document.documentElement;
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+
     let theme = settings.theme;
     if (theme === 'system') {
       theme = prefersDark ? 'dark' : 'light';
     }
-    
+
     root.classList.remove('light', 'dark');
     root.classList.add(theme);
   }, [settings.theme]);
 
+  // Apply language on mount and when it changes
+  useEffect(() => {
+    i18n.changeLanguage(settings.language);
+  }, [settings.language, i18n]);
+
   const handleSettingsChange = (newSettings: Settings) => {
     saveSettings(newSettings);
-    setIsSettingsOpen(false);
   };
 
   const handleSetupComplete = (newSettings: Settings) => {
@@ -77,6 +84,7 @@ function App() {
 
   const handleLanguageToggle = () => {
     const newLanguage = settings.language === 'en' ? 'np' : 'en';
+    i18n.changeLanguage(newLanguage);
     saveSettings({ ...settings, language: newLanguage });
   };
 
@@ -111,19 +119,20 @@ function App() {
       <header className="sticky top-0 z-40">
         <div className="bg-surface/80 backdrop-blur-lg border-b border-border/10 shadow-sm">
           <div className="container mx-auto">
-            <div className="flex items-center h-16 px-4">
-              <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="flex items-center space-x-3"
-              >
-                <NewspaperIcon className="h-8 w-8 text-primary" />
-                <h1 className="text-2xl font-display font-bold tracking-tight">YoNews</h1>
-              </motion.div>
-              
-              {/* Language Controls */}
-              <div className="flex items-center space-x-4 ml-6">
-                <div className="flex items-center gap-2 bg-background/50 p-1 rounded-full">
+            <div className="flex items-center justify-between h-16 px-4">
+              {/* Left Section */}
+              <div className="flex items-center space-x-4">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className="flex items-center space-x-3"
+                >
+                  <NewspaperIcon className="h-8 w-8 text-primary" />
+                  <h1 className="text-2xl font-display font-bold tracking-tight">YoNews</h1>
+                </motion.div>
+
+                {/* Language Controls */}
+                <div className="hidden md:flex items-center gap-2 bg-background/50 p-1 rounded-full">
                   <button
                     onClick={handleLanguageToggle}
                     className={`px-3 py-1 rounded-full text-sm font-medium transition-colors ${
@@ -145,36 +154,36 @@ function App() {
                     नेपाली
                   </button>
                 </div>
+
+                {/* Source Toggle */}
+                <div className="hidden md:flex items-center space-x-2">
+                  <button
+                    onClick={() => handleSourceToggle('international')}
+                    className={`p-2 rounded-full transition-colors ${
+                      settings.newsSources.includes('international')
+                        ? 'bg-primary text-white'
+                        : 'bg-surface hover:bg-primary/10'
+                    }`}
+                    title="International News"
+                  >
+                    <Globe className="h-5 w-5" />
+                  </button>
+                  <button
+                    onClick={() => handleSourceToggle('domestic')}
+                    className={`p-2 rounded-full transition-colors ${
+                      settings.newsSources.includes('domestic')
+                        ? 'bg-primary text-white'
+                        : 'bg-surface hover:bg-primary/10'
+                    }`}
+                    title="Nepali News"
+                  >
+                    <Home className="h-5 w-5" />
+                  </button>
+                </div>
               </div>
-              
-              {/* Source Toggle */}
-              <div className="flex items-center space-x-2 ml-4">
-                <button
-                  onClick={() => handleSourceToggle('international')}
-                  className={`p-2 rounded-full transition-colors ${
-                    settings.newsSources.includes('international')
-                      ? 'bg-primary text-white'
-                      : 'bg-surface hover:bg-primary/10'
-                  }`}
-                  title="International News"
-                >
-                  <Globe className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => handleSourceToggle('domestic')}
-                  className={`p-2 rounded-full transition-colors ${
-                    settings.newsSources.includes('domestic')
-                      ? 'bg-primary text-white'
-                      : 'bg-surface hover:bg-primary/10'
-                  }`}
-                  title="Nepali News"
-                >
-                  <Home className="h-5 w-5" />
-                </button>
-              </div>
-              
-              {/* Search Bar */}
-              <motion.div 
+
+              {/* Center Section - Search */}
+              <motion.div
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="flex-1 max-w-xl mx-4"
@@ -191,29 +200,15 @@ function App() {
                 </div>
               </motion.div>
 
-              {/* Controls */}
-              <motion.div 
+              {/* Right Section - Controls */}
+              <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 className="flex items-center space-x-2"
               >
                 <button
-                  onClick={handleRefresh}
-                  className="p-2 rounded-full hover:bg-primary/10 transition-colors duration-200"
-                  title="Refresh"
-                >
-                  <RefreshCw className="h-5 w-5" />
-                </button>
-                <button
-                  onClick={() => setShowFilters(!showFilters)}
-                  className="p-2 rounded-full hover:bg-primary/10 transition-colors duration-200"
-                  title="Filters"
-                >
-                  <Filter className="h-5 w-5" />
-                </button>
-                <button
                   onClick={handleThemeToggle}
-                  className="p-2 rounded-full hover:bg-primary/10 transition-colors duration-200 relative group"
+                  className="hidden md:flex p-2 rounded-full hover:bg-primary/10 transition-colors duration-200"
                   title={settings.theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
                 >
                   <AnimatePresence mode="wait">
@@ -231,43 +226,40 @@ function App() {
                       )}
                     </motion.div>
                   </AnimatePresence>
-                  <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-                    {settings.theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-                  </span>
                 </button>
                 <button
                   onClick={() => setIsSettingsOpen(true)}
-                  className="p-2 rounded-full hover:bg-primary/10 transition-colors duration-200 relative group"
+                  className="p-2 rounded-full hover:bg-primary/10 transition-colors duration-200"
                   title="Settings"
                 >
                   <SettingsIcon className="h-5 w-5" />
-                  <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-surface px-2 py-1 rounded text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                    Settings
-                  </span>
                 </button>
               </motion.div>
             </div>
 
             {/* Categories */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex items-center space-x-2 px-4 py-3 overflow-x-auto scrollbar-hide"
             >
-              {['All', 'World', 'Technology', 'Politics', 'Sports', 'Entertainment', 'Health'].map(category => (
-                <motion.button
-                  key={category}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setCurrentCategory(category)}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200
-                    ${currentCategory === category
-                      ? 'bg-primary text-white shadow-sm'
-                      : 'bg-primary/10 hover:bg-primary/20 text-primary'}`}
-                >
-                  {category}
-                </motion.button>
-              ))}
+              {['all', 'world', 'technology', 'politics', 'sports', 'entertainment', 'health'].map(categoryKey => {
+                const category = t(`settings.categories.${categoryKey}`);
+                return (
+                  <motion.button
+                    key={categoryKey}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setCurrentCategory(category)}
+                    className={`px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-200
+                      ${currentCategory === category
+                        ? 'bg-primary text-white shadow-sm'
+                        : 'bg-primary/10 hover:bg-primary/20 text-primary'}`}
+                  >
+                    {category}
+                  </motion.button>
+                );
+              })}
             </motion.div>
           </div>
         </div>
@@ -378,6 +370,18 @@ function App() {
           </motion.div>
         )}
       </main>
+
+      {/* Settings Modal */}
+      <AnimatePresence>
+        {isSettingsOpen && (
+          <SettingsModal
+            isOpen={isSettingsOpen}
+            onClose={() => setIsSettingsOpen(false)}
+            settings={settings}
+            onSettingsChange={handleSettingsChange}
+          />
+        )}
+      </AnimatePresence>
     </div>
   );
 }

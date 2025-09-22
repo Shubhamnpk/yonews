@@ -1,0 +1,74 @@
+{
+  "settings": {
+    "title": "सेटिङहरू",
+    "subtitle": "तपाईंको समाचार पढ्ने अनुभव अनुकूलन गर्नुहोस्",
+    "sections": {
+      "theme": "थिम",
+      "display": "प्रदर्शन",
+      "features": "सुविधाहरू",
+      "notifications": "सूचनाहरू",
+      "language": "भाषा",
+      "newsSources": "समाचार स्रोतहरू"
+    },
+    "theme": {
+      "light": "प्रकाश",
+      "dark": "अंधकार",
+      "system": "प्रणाली"
+    },
+    "display": {
+      "showThumbnails": {
+        "label": "थम्बनेलहरू देखाउनुहोस्",
+        "description": "समाचार फिडमा लेखका थम्बनेलहरू प्रदर्शन गर्नुहोस्"
+      },
+      "readingTime": {
+        "label": "पढ्ने समय",
+        "description": "लेखहरूको लागि अनुमानित पढ्ने समय देखाउनुहोस्"
+      },
+      "layoutDensity": {
+        "label": "लेआउट घनत्व",
+        "comfortable": "आरामदायक (12 लेखहरू)",
+        "balanced": "सन्तुलित (24 लेखहरू)",
+        "compact": "कम्प्याक्ट (36 लेखहरू)"
+      }
+    },
+    "features": {
+      "socialSharing": {
+        "label": "सामाजिक साझेदारी",
+        "description": "सामाजिक मिडिया साझेदारी बटनहरू सक्षम गर्नुहोस्"
+      },
+      "autoRefresh": {
+        "label": "स्वत: रिफ्रेस",
+        "description": "समाचार फिडलाई स्वत: रिफ्रेस गर्नुहोस्"
+      }
+    },
+    "notifications": {
+      "pushNotifications": {
+        "label": "पुश सूचनाहरू",
+        "description": "नयाँ लेखहरूको लागि सूचनाहरू प्राप्त गर्नुहोस्"
+      }
+    },
+    "language": {
+      "english": "English",
+      "nepali": "नेपाली"
+    },
+    "newsSources": {
+      "international": {
+        "label": "अन्तर्राष्ट्रिय समाचार",
+        "description": "अन्तर्राष्ट्रिय समाचार स्रोतहरू समावेश गर्नुहोस्"
+      },
+      "nepali": {
+        "label": "नेपाली समाचार",
+        "description": "नेपाली समाचार स्रोतहरू समावेश गर्नुहोस्"
+      }
+    },
+    "categories": {
+      "all": "सबै",
+      "world": "विश्व",
+      "technology": "प्रविधि",
+      "politics": "राजनीति",
+      "sports": "खेलकुद",
+      "entertainment": "मनोरञ्जन",
+      "health": "स्वास्थ्य"
+    }
+  }
+}

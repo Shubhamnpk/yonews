@@ -1,0 +1,74 @@
+{
+  "settings": {
+    "title": "Settings",
+    "subtitle": "Customize your news reading experience",
+    "sections": {
+      "theme": "Theme",
+      "display": "Display",
+      "features": "Features",
+      "notifications": "Notifications",
+      "language": "Language",
+      "newsSources": "News Sources"
+    },
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "display": {
+      "showThumbnails": {
+        "label": "Show Thumbnails",
+        "description": "Display article thumbnails in the news feed"
+      },
+      "readingTime": {
+        "label": "Reading Time",
+        "description": "Show estimated reading time for articles"
+      },
+      "layoutDensity": {
+        "label": "Layout Density",
+        "comfortable": "Comfortable (12 articles)",
+        "balanced": "Balanced (24 articles)",
+        "compact": "Compact (36 articles)"
+      }
+    },
+    "features": {
+      "socialSharing": {
+        "label": "Social Sharing",
+        "description": "Enable social media sharing buttons"
+      },
+      "autoRefresh": {
+        "label": "Auto Refresh",
+        "description": "Automatically refresh the news feed"
+      }
+    },
+    "notifications": {
+      "pushNotifications": {
+        "label": "Push Notifications",
+        "description": "Receive notifications for new articles"
+      }
+    },
+    "language": {
+      "english": "English",
+      "nepali": "नेपाली"
+    },
+    "newsSources": {
+      "international": {
+        "label": "International News",
+        "description": "Include international news sources"
+      },
+      "nepali": {
+        "label": "Nepali News",
+        "description": "Include Nepali news sources"
+      }
+    },
+    "categories": {
+      "all": "All",
+      "world": "World",
+      "technology": "Technology",
+      "politics": "Politics",
+      "sports": "Sports",
+      "entertainment": "Entertainment",
+      "health": "Health"
+    }
+  }
+}

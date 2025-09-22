@@ -1,22 +1,21 @@
-import React from 'react';
 import { motion } from 'framer-motion';
-import { 
-  X, 
-  Moon, 
-  Sun, 
+import { useTranslation } from 'react-i18next';
+import {
+  X,
+  Moon,
+  Sun,
   Monitor,
-  Volume2,
-  VolumeX,
   Bell,
   BellOff,
   Eye,
-  EyeOff,
   Share2,
   Image,
   ImageOff,
   RefreshCw,
   Clock,
-  Layout
+  Newspaper,
+  Globe,
+  Home
 } from 'lucide-react';
 import { Settings } from '../types/news';
 
@@ -28,6 +27,8 @@ interface SettingsModalProps {
 }
 
 export function SettingsModal({ isOpen, onClose, settings, onSettingsChange }: SettingsModalProps) {
+  const { t, i18n } = useTranslation();
+
   const handleThemeChange = (theme: 'light' | 'dark' | 'system') => {
     onSettingsChange({ ...settings, theme });
   };
@@ -88,15 +89,21 @@ export function SettingsModal({ isOpen, onClose, settings, onSettingsChange }: S
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
-        className="w-full max-w-2xl p-6 rounded-2xl bg-surface border border-border/10 shadow-xl max-h-[90vh] overflow-y-auto"
+        className="w-full h-full md:max-w-3xl md:rounded-3xl md:max-h-[90vh] bg-gradient-to-br from-surface via-surface to-background/50 md:border border-border/20 shadow-2xl backdrop-blur-xl flex flex-col"
         onClick={e => e.stopPropagation()}
       >
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-2xl font-display font-bold">
-              {settings.language === 'en' ? 'Settings' : 'सेटिङहरू'}
-            </h2>
-            <p className="text-secondary mt-1">Customize your news reading experience</p>
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 md:p-8 pb-3 md:pb-6">
+          <div className="flex items-center space-x-3">
+            <div className="p-3 rounded-full bg-primary/10">
+              <Newspaper className="h-8 w-8 text-primary" />
+            </div>
+            <div>
+              <h2 className="text-3xl font-display font-bold">
+                {t('settings.title')}
+              </h2>
+              <p className="text-secondary mt-1">{t('settings.subtitle')}</p>
+            </div>
           </div>
           <button
             onClick={onClose}
@@ -106,11 +113,18 @@ export function SettingsModal({ isOpen, onClose, settings, onSettingsChange }: S
           </button>
         </div>
 
-        <div className="space-y-8">
-          {/* Theme Selection */}
-          <section>
-            <h3 className="text-lg font-medium mb-4">Theme</h3>
-            <div className="grid grid-cols-3 gap-3">
+
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto px-4 md:px-8 pb-4 md:pb-8">
+          <div className="space-y-10">
+
+          {/* Display Settings */}
+          <section className="bg-background/30 rounded-xl p-4 md:p-6 border border-border/10">
+            <h3 className="text-xl font-semibold mb-4 md:mb-6 flex items-center gap-2">
+              <Sun className="h-5 w-5 text-primary" />
+              {t('settings.sections.theme')}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <button
                 onClick={() => handleThemeChange('light')}
                 className={`flex items-center justify-center gap-2 p-4 rounded-lg border transition-all ${
@@ -120,7 +134,7 @@ export function SettingsModal({ isOpen, onClose, settings, onSettingsChange }: S
                 }`}
               >
                 <Sun className="h-5 w-5" />
-                <span>Light</span>
+                <span>{t('settings.theme.light')}</span>
               </button>
               <button
                 onClick={() => handleThemeChange('dark')}
@@ -131,7 +145,7 @@ export function SettingsModal({ isOpen, onClose, settings, onSettingsChange }: S
                 }`}
               >
                 <Moon className="h-5 w-5" />
-                <span>Dark</span>
+                <span>{t('settings.theme.dark')}</span>
               </button>
               <button
                 onClick={() => handleThemeChange('system')}
@@ -142,83 +156,165 @@ export function SettingsModal({ isOpen, onClose, settings, onSettingsChange }: S
                 }`}
               >
                 <Monitor className="h-5 w-5" />
-                <span>System</span>
+                <span>{t('settings.theme.system')}</span>
               </button>
             </div>
           </section>
-
-          {/* Display Settings */}
-          <section>
-            <h3 className="text-lg font-medium mb-4">Display</h3>
-            <div className="space-y-3">
+          <section className="bg-background/30 rounded-xl p-4 md:p-6 border border-border/10">
+            <h3 className="text-xl font-semibold mb-4 md:mb-6 flex items-center gap-2">
+              <Eye className="h-5 w-5 text-primary" />
+              {t('settings.sections.display')}
+            </h3>
+            <div className="space-y-4">
               <SettingToggle
                 checked={settings.showThumbnails}
                 onChange={(value) => onSettingsChange({ ...settings, showThumbnails: value })}
-                label="Show Thumbnails"
+                label={t('settings.display.showThumbnails.label')}
                 icon={Image}
                 offIcon={ImageOff}
-                description="Display article thumbnails in the news feed"
+                description={t('settings.display.showThumbnails.description')}
               />
               <SettingToggle
                 checked={settings.showReadingTime}
                 onChange={(value) => onSettingsChange({ ...settings, showReadingTime: value })}
-                label="Reading Time"
+                label={t('settings.display.readingTime.label')}
                 icon={Clock}
                 offIcon={Clock}
-                description="Show estimated reading time for articles"
+                description={t('settings.display.readingTime.description')}
               />
               <div className="p-4 rounded-lg bg-background/50">
-                <label className="block text-sm font-medium mb-2">Layout Density</label>
+                <label className="block text-sm font-medium mb-2">{t('settings.display.layoutDensity.label')}</label>
                 <select
                   value={settings.articlesPerPage}
                   onChange={(e) => onSettingsChange({ ...settings, articlesPerPage: Number(e.target.value) })}
                   className="w-full rounded-lg border border-border bg-surface px-3 py-2"
                 >
-                  <option value="12">Comfortable (12 articles)</option>
-                  <option value="24">Balanced (24 articles)</option>
-                  <option value="36">Compact (36 articles)</option>
+                  <option value="12">{t('settings.display.layoutDensity.comfortable')}</option>
+                  <option value="24">{t('settings.display.layoutDensity.balanced')}</option>
+                  <option value="36">{t('settings.display.layoutDensity.compact')}</option>
                 </select>
               </div>
             </div>
           </section>
 
           {/* Features */}
-          <section>
-            <h3 className="text-lg font-medium mb-4">Features</h3>
-            <div className="space-y-3">
+          <section className="bg-background/30 rounded-xl p-4 md:p-6 border border-border/10">
+            <h3 className="text-xl font-semibold mb-4 md:mb-6 flex items-center gap-2">
+              <Share2 className="h-5 w-5 text-primary" />
+              {t('settings.sections.features')}
+            </h3>
+            <div className="space-y-4">
               <SettingToggle
                 checked={settings.enableSocialShare}
                 onChange={(value) => onSettingsChange({ ...settings, enableSocialShare: value })}
-                label="Social Sharing"
+                label={t('settings.features.socialSharing.label')}
                 icon={Share2}
                 offIcon={Share2}
-                description="Enable social media sharing buttons"
+                description={t('settings.features.socialSharing.description')}
               />
               <SettingToggle
                 checked={settings.autoRefresh}
                 onChange={(value) => onSettingsChange({ ...settings, autoRefresh: value })}
-                label="Auto Refresh"
+                label={t('settings.features.autoRefresh.label')}
                 icon={RefreshCw}
                 offIcon={RefreshCw}
-                description="Automatically refresh the news feed"
+                description={t('settings.features.autoRefresh.description')}
               />
             </div>
           </section>
 
           {/* Notifications */}
-          <section>
-            <h3 className="text-lg font-medium mb-4">Notifications</h3>
-            <div className="space-y-3">
+          <section className="bg-background/30 rounded-xl p-4 md:p-6 border border-border/10">
+            <h3 className="text-xl font-semibold mb-4 md:mb-6 flex items-center gap-2">
+              <Bell className="h-5 w-5 text-primary" />
+              {t('settings.sections.notifications')}
+            </h3>
+            <div className="space-y-4">
               <SettingToggle
                 checked={settings.notifications}
                 onChange={(value) => onSettingsChange({ ...settings, notifications: value })}
-                label="Push Notifications"
+                label={t('settings.notifications.pushNotifications.label')}
                 icon={Bell}
                 offIcon={BellOff}
-                description="Receive notifications for new articles"
+                description={t('settings.notifications.pushNotifications.description')}
               />
             </div>
           </section>
+
+          {/* Language */}
+          <section className="bg-background/30 rounded-xl p-4 md:p-6 border border-border/10">
+            <h3 className="text-xl font-semibold mb-4 md:mb-6 flex items-center gap-2">
+              <Globe className="h-5 w-5 text-primary" />
+              {t('settings.sections.language')}
+            </h3>
+            <div className="space-y-4">
+              <label className="flex items-center space-x-4 p-3 rounded-lg hover:bg-background/50 transition-colors cursor-pointer">
+                <input
+                  type="radio"
+                  name="language"
+                  value="en"
+                  checked={settings.language === 'en'}
+                  onChange={() => {
+                    i18n.changeLanguage('en');
+                    onSettingsChange({ ...settings, language: 'en' });
+                  }}
+                  className="w-4 h-4 text-primary border-border focus:ring-primary/20"
+                />
+                <span className="font-medium">{t('settings.language.english')}</span>
+              </label>
+              <label className="flex items-center space-x-4 p-3 rounded-lg hover:bg-background/50 transition-colors cursor-pointer">
+                <input
+                  type="radio"
+                  name="language"
+                  value="np"
+                  checked={settings.language === 'np'}
+                  onChange={() => {
+                    i18n.changeLanguage('np');
+                    onSettingsChange({ ...settings, language: 'np' });
+                  }}
+                  className="w-4 h-4 text-primary border-border focus:ring-primary/20"
+                />
+                <span className="font-medium">{t('settings.language.nepali')}</span>
+              </label>
+            </div>
+          </section>
+
+          {/* News Sources */}
+          <section className="bg-background/30 rounded-xl p-4 md:p-6 border border-border/10">
+            <h3 className="text-xl font-semibold mb-4 md:mb-6 flex items-center gap-2">
+              <Newspaper className="h-5 w-5 text-primary" />
+              {t('settings.sections.newsSources')}
+            </h3>
+            <div className="space-y-4">
+              <SettingToggle
+                checked={settings.newsSources.includes('international')}
+                onChange={(value) => {
+                  const newSources = value
+                    ? [...settings.newsSources, 'international']
+                    : settings.newsSources.filter(s => s !== 'international');
+                  onSettingsChange({ ...settings, newsSources: newSources });
+                }}
+                label={t('settings.newsSources.international.label')}
+                icon={Globe}
+                offIcon={Globe}
+                description={t('settings.newsSources.international.description')}
+              />
+              <SettingToggle
+                checked={settings.newsSources.includes('domestic')}
+                onChange={(value) => {
+                  const newSources = value
+                    ? [...settings.newsSources, 'domestic']
+                    : settings.newsSources.filter(s => s !== 'domestic');
+                  onSettingsChange({ ...settings, newsSources: newSources });
+                }}
+                label={t('settings.newsSources.nepali.label')}
+                icon={Home}
+                offIcon={Home}
+                description={t('settings.newsSources.nepali.description')}
+              />
+            </div>
+          </section>
+          </div>
         </div>
       </motion.div>
     </motion.div>
