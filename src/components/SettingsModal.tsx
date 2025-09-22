@@ -15,9 +15,11 @@ import {
   Clock,
   Newspaper,
   Globe,
-  Home
+  Home,
+  Info
 } from 'lucide-react';
 import { Settings } from '../types/news';
+import pkg from '../../package.json';
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -312,6 +314,28 @@ export function SettingsModal({ isOpen, onClose, settings, onSettingsChange }: S
                 offIcon={Home}
                 description={t('settings.newsSources.nepali.description')}
               />
+            </div>
+          </section>
+
+          {/* About */}
+          <section className="bg-background/30 rounded-xl p-4 md:p-6 border border-border/10">
+            <h3 className="text-xl font-semibold mb-4 md:mb-6 flex items-center gap-2">
+              <Info className="h-5 w-5 text-primary" />
+              About
+            </h3>
+            <div className="space-y-3 text-sm">
+              <div className="flex justify-between">
+                <span className="text-secondary">Version:</span>
+                <span className="font-medium">{pkg.version}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-secondary">Build Number:</span>
+                <span className="font-medium">1.0.0</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-secondary">Creator:</span>
+                <span className="font-medium">{pkg.author}</span>
+              </div>
             </div>
           </section>
           </div>

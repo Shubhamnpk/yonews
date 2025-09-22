@@ -2,6 +2,7 @@
   "name": "yonews",
   "private": true,
   "version": "1.1.0",
+  "author": "Yoguru Team",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -20,7 +21,8 @@
     "react-dom": "^18.3.1",
     "react-i18next": "^15.7.3",
     "react-intersection-observer": "^9.8.1",
-    "react-share": "^5.1.0"
+    "react-share": "^5.1.0",
+    "rss-parser": "^3.13.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
