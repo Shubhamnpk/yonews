@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Article, Settings, FeedUrls } from '../types/news';
 import { useInView } from 'react-intersection-observer';
-import Parser from 'rss-parser';
 
 const DEFAULT_SETTINGS: Settings = {
   newsSources: ['international'],
@@ -161,23 +160,17 @@ export const useNewsFeed = () => {
         ? settings.newsSources.flatMap(source => FEED_URLS[source].all)
         : settings.newsSources.map(source => FEED_URLS[source][category]).flat();
 
-      const parser = new Parser();
+      const apiKey = '9yafqwvbnwucsmlqmlb8mk1opqhbvivdvp6qlmqz';
       const results = await Promise.allSettled(
         feeds.map(feed =>
-          fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(feed)}`, {
+          fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(feed)}&api_key=${apiKey}`, {
             signal: controller.signal
           })
             .then(async res => {
               if (!res.ok) {
                 throw new Error(`HTTP error! status: ${res.status}`);
               }
-              const data = await res.json();
-              const parsed = await parser.parseString(data.contents);
-              return {
-                status: 'ok',
-                feed: { title: parsed.title },
-                items: parsed.items
-              };
+              return res.json();
             })
             .catch(error => {
               if (error.name === 'AbortError') {
@@ -194,18 +187,14 @@ export const useNewsFeed = () => {
       }
 
       let allArticles = results
-        .filter((result): result is PromiseFulfilledResult<any> =>
+        .filter((result): result is PromiseFulfilledResult<any> => 
           result.status === 'fulfilled' && result.value.status === 'ok')
-        .flatMap(result =>
+        .flatMap(result => 
           result.value.items.map((item: any) => ({
-            title: item.title,
-            description: item.contentSnippet || item.content || '',
-            link: item.link,
-            pubDate: item.pubDate,
-            guid: item.guid,
+            ...item,
             id: `${item.guid || item.link}`,
             source: result.value.feed?.title || 'Unknown Source',
-            thumbnail: item.enclosure?.[0]?.url || null,
+            thumbnail: item.thumbnail || item.enclosure?.link || null,
             isBookmarked: bookmarkedArticles.includes(`${item.guid || item.link}`),
             isReadLater: readLaterArticles.includes(`${item.guid || item.link}`)
           }))
