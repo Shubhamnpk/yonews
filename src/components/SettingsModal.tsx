@@ -28,7 +28,7 @@ interface SettingsModalProps {
   onSettingsChange: (settings: Settings) => void;
 }
 
-export function SettingsModal({ isOpen, onClose, settings, onSettingsChange }: SettingsModalProps) {
+export function SettingsModal({ isOpen: _isOpen, onClose, settings, onSettingsChange }: SettingsModalProps) {
   const { t, i18n } = useTranslation();
 
   const handleThemeChange = (theme: 'light' | 'dark' | 'system') => {
